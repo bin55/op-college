@@ -1,0 +1,11 @@
+*.class
+*.log
+*.classpath
+*.project
+*.gitignore.swp
+*.DS_Store
+/target/
+target/
+.settings/
+.git/
+/target/

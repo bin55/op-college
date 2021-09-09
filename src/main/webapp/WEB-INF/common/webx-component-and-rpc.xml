@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:services="http://www.alibaba.com/schema/services"
+	xmlns:dr-factories="http://www.alibaba.com/schema/services/data-resolver/factories"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:webx2-services="http://www.alibaba.com/schema/webx2-services"
+	xsi:schemaLocation="
+                 http://www.alibaba.com/schema/services                         http://localhost:8080/schema/services.xsd
+                 http://www.alibaba.com/schema/services/data-resolver/factories http://localhost:8080/schema/services-data-resolver-factories.xsd
+                 http://www.alibaba.com/schema/webx2-services                   http://localhost:8080/schema/www.alibaba.com/schema/webx2-services.xsd
+                 http://www.springframework.org/schema/beans                    http://localhost:8080/schema/www.springframework.org/schema/beans/spring-beans.xsd
+             ">
+	<services:form />
+	<!-- ==================================================================================================== -->
+	<!-- WebX3 RPC 服务配置 （开始） -->
+	<!-- ==================================================================================================== -->
+	<!-- RPC 数据绑定服务 -->
+	<beans:bean id='rpcDatabindService' class='com.alibaba.nonda.databind.impl.DatabindServiceImpl'>
+		<beans:property name="registry">
+			<beans:bean id='databinderRegistry' class='com.alibaba.nonda.databind.impl.DatabinderRegistryImpl'>
+				<beans:property name="binderFactories">
+					<beans:list>
+						<beans:bean class="com.alibaba.citrus.extension.rpc.databind.RPCDatabinderFactory" />
+					</beans:list>
+				</beans:property>
+			</beans:bean>
+		</beans:property>
+	</beans:bean>
+	<!-- <services:form /> -->
+	<!-- 支持注入参数。 -->
+	<services:data-resolver xmlns="http://www.alibaba.com/schema/services/data-resolver/factories">
+		<turbine-rundata-resolver />
+		<parameter-resolver />
+		<form-resolver />
+	</services:data-resolver>
+	<!-- RPC 数据验证服务 -->
+	<beans:bean id='rpcValidateService' class="com.alibaba.nonda.integration.webx3.validation.ValidateService4WebX3" />
+	<!-- RPC URL与组件的映射服务 -->
+	<beans:bean id='rpcUrlComponentMapping' class="com.alibaba.citrus.extension.rpc.impl.URLComponentMappingImpl">
+		<!-- 标识RPC服务的命名空间（通过不同的namespace来模板化不同的业务） -->
+		<beans:property name="namespace" value="${component}" />
+	</beans:bean>
+	<!-- RPC 处理请求的核心服务 -->
+	<beans:bean id='rpcServiceHandler' class="com.alibaba.citrus.extension.rpc.impl.RPCServiceHandlerImpl">
+		<beans:property name="xssType" value="escape" />
+		<!-- 示例：覆盖缺省的 resultGenerator -->
+		<beans:property name="resultGenerator">
+   			<beans:bean class="com.alibaba.dt.op.common.web.rpc.CustomRPCResultGenerator" />
+   		</beans:property>
+	</beans:bean>
+	<!-- ==================================================================================================== -->
+	<!-- WebX3 RPC 服务配置 （结束） -->
+	<!-- ==================================================================================================== -->
+</beans:beans>

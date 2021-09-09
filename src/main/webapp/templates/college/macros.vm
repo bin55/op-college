@@ -1,0 +1,19 @@
+#macro (showStylesheets)
+  #foreach($styleSheet in $page.styleSheets)
+    <link rel="stylesheet" href="$styleSheet.Url" />
+  #end
+#end
+#macro (showJavascripts)
+  #foreach($script in $page.scripts)
+    <script type="text/javascript" src="$script" language="JavaScript"></script>
+  #end
+#end
+#macro( checkElement $eleCode $permissionCodes) 
+	#set($_hasPemission=false)
+	#foreach( $code in $permissionCodes ) 
+		#if($eleCode == $code)
+			#set($_hasPemission=true)
+			#break
+		#end
+	#end
+#end 

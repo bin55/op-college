@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Logback Configuration. -->
+<configuration debug="false">
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<target>System.out</target>
+		<encoding>UTF-8</encoding>
+		<filter class="com.alibaba.citrus.logconfig.logback.LevelRangeFilter">
+			<levelMax>INFO</levelMax>
+		</filter>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern><![CDATA[
+%n%-4r [%d{yyyy-MM-dd HH:mm:ss}] - %X{method} %X{requestURIWithQueryString} [ip=%X{remoteAddr}, ref=%X{referrer}, ua=%X{userAgent}%n  %-5level %logger{35} - %m%n
+            ]]></pattern>
+		</layout>
+	</appender>
+
+	<appender name="STDFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoding>UTF-8</encoding>
+		<File>${loggingRoot}/root.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${loggingRoot}/root.log.%d{yyyy-MM-dd}-%i</FileNamePattern>
+			<MaxHistory>30</MaxHistory>
+			<TimeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<MaxFileSize>50MB</MaxFileSize>
+			</TimeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern><![CDATA[
+%n%-4r [%d{yyyy-MM-dd HH:mm:ss}] - %X{method} %X{requestURIWithQueryString} [ip=%X{remoteAddr}, ref=%X{referrer}, ua=%X{userAgent}%n  %-5level %logger{35} - %m%n 
+            ]]></pattern>
+		</layout>
+	</appender>
+	<appender name="STDACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoding>UTF-8</encoding>
+		<File>${loggingRoot}/access.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${loggingRoot}/access.log.%d{yyyy-MM-dd}-%i</FileNamePattern>
+			<MaxHistory>30</MaxHistory>
+			<TimeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<MaxFileSize>50MB</MaxFileSize>
+			</TimeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern><![CDATA[
+%n%d{yyyy-MM-dd HH:mm:ss}|%X{remoteAddr}%X{accessMsg}%n
+            ]]></pattern>
+		</layout>
+	</appender>
+	
+	<appender name="STDERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoding>UTF-8</encoding>
+		<File>${loggingRoot}/error.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${loggingRoot}/error.log.%d{yyyy-MM-dd}-%i</FileNamePattern>
+			<MaxHistory>30</MaxHistory>
+			<TimeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<MaxFileSize>50MB</MaxFileSize>
+			</TimeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern><![CDATA[
+%n OPERROR %d{yyyy-MM-dd HH:mm:ss} | %X{remoteAddr} | %X{requestURIWithQueryString}%X{errorMsg}%n
+            ]]></pattern>
+		</layout>
+	</appender>
+	
+	<appender name="JMONITOR_LOG" class="com.alibaba.alimonitor.jmonitor.plugin.logback.JMonitorLogbackAppender"></appender>
+
+	<appender name="EXCEPTION_LOG" class="com.alibaba.dragoon.patrol.log4j.PatrolLog4jAppender">
+   		<param name="Threshold" value="ERROR"/>
+	</appender>
+
+	<logger name="com.taobao.tddl">
+		<level value="ERROR" />
+	</logger>
+	
+	<logger name="com.taobao.inventory.client">
+		<level value="ERROR" />
+	</logger>
+	
+	<logger name="com.alibaba.dt.op.common.web" additivity="false">
+		<level value="ERROR" />
+		<appender-ref ref="STDACCESS" />
+	</logger>
+	
+	 
+	<logger name="com.alibaba.dt.op.lang.util.log" additivity="false">
+		<level value="ERROR" />
+		<appender-ref ref="STDERROR" />
+	</logger>
+	
+	
+	<root>
+		<level value="${loggingLevel}" />
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="STDFILE" />
+		<appender-ref ref="STDACCESS" />
+		<appender-ref ref="STDERROR" />
+		<appender-ref ref="JMONITOR_LOG"/>
+	</root>
+</configuration>

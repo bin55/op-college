@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<group>
+		<property name="env" description="应用程序的工作环境"
+			defaultValue="online" />
+		<property name="work" description="应用程序的工作目录" />
+		<property name="loggingRoot" defaultValue="${work}/logs"
+			description="日志文件目录" />
+		<property name="loggingLevel" defaultValue="warn"
+			description="日志文件级别">
+			<validator name="choice" choice="trace, debug, info, warn, error" />
+		</property>
+		<property name="tddl.appName" defaultValue="CBUDW_DEV_APP" description="tddl数据库应用名" />
+	</group>
+	<script>
+		<generate template="web.xml.vm" destfile="WEB-INF/web.xml"/>
+		<generate template="config.properties.vm"  destfile="WEB-INF/classes/properties/config.properties" charset="utf-8"/>
+	</script>
+</config>

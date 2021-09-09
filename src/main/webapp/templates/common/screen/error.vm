@@ -1,0 +1,19 @@
+#if($!{useDebug}=='true')
+  $!page.addStyleSheet('http://op-portal.tbcdn.cn/watch/css/error/app.css')
+  $!page.addScript('http://op-portal.tbcdn.cn/watch/js/error/app.js')
+#else
+  #set( $portalStyleCSS = "http://g.tbcdn.cn/dt/op-portal/" + $!portalStyleVersion + "/css/error/app.css")
+  #set( $portalStyleJS = "http://g.tbcdn.cn/dt/op-portal/" + $!portalStyleVersion + "/js/error/app.js")
+  $!page.addStyleSheet($!portalStyleCSS)
+  $!page.addScript($!portalStyleJS)
+#end
+<div class="error-tip exception">
+  <span class="error-tip-img"></span>
+  <div class="error-tip-panel">
+    <div class="error-tip-content sans-serif">
+      <p >访客太多，生意参谋接待不过来了哦！</p>
+      <p >请先喝杯茶听听音乐，稍后再试吧！</p>
+    </div>
+    <div class="error-tip-operate"><a href="#" class="btn btn-primary" onclick="location.reload();">尝试刷新</a></div>
+  </div>
+</div>

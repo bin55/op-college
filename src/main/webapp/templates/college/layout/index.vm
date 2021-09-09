@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="renderer" content="webkit">
+  <meta name="keywords" content="生意参谋，阿里巴巴生意参谋，市场行情，数据作战室，大数据分析，生意经，电商运营，零售电商">
+  <meta name="description" content="阿里巴巴生意参谋零售电商版是淘系商家开店做生意和数据化运营必备的官方数据产品，涵盖实时直播、经营分析、市场行情、竞争情报、专题工具等功能，既可以看店铺自有数据，也可以观市场，窥竞争对手。2016年7月生意参谋2.0版升级了个性化定制首页、数据学院（原帮助中心）等，新增服务分析、财务分析等功能；同时还新增了多店版，支持一屏查看多店汇总数据，一键切换多个店铺查看子店铺经营数据等功能。精细化电商运营，尽在生意参谋">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="microdata" content="viewMode=$!{viewMode};storeVersion=$!{storeVersion};isSudo=$!{isSudo};ctxEnv=$!{ctxEnv};bucUserId=$!{bucUserId};bucUserName=$!{bucUserName};loginUserId=$!{loginUserId};loginUserName=$!{loginUserName};mainUserId=$!{mainUserId};mainUserName=$!{mainUserName};runAsUserId=$!{runAsUserId};runAsUserName=$!{runAsUserName};runAsShopType=$!{runAsShopType};runAsShopTitle=$!{runAsShopTitle};runAsShopId=$!{runAsShopId};isSudo=$!{isSudo};legalityToken=$!{legalityToken};splitTag=splitTag;viewMode=$!{viewMode};storeVersion=$!{storeVersion};isSudo=$!{isSudo};ctxEnv=$!{ctxEnv};bucUserId=$!{bucUserId};bucUserName=$!{bucUserName};loginUserId=$!{loginUserId};loginUserName=$!{loginUserName};mainUserId=$!{mainUserId};mainUserName=$!{mainUserName};runAsUserId=$!{runAsUserId};runAsUserName=$!{runAsUserName};runAsShopType=$!{runAsShopType};runAsShopTitle=$!{runAsShopTitle};runAsShopId=$!{runAsShopId};isSudo=$!{isSudo};legalityToken=$!{legalityToken};">
+  <title>生意参谋 - 零售电商大数据产品平台</title>
+  <link rel="icon" href="//img.alicdn.com/tps/TB14m1NKFXXXXXMaXXXXXXXXXXX-48-48.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="//img.alicdn.com/tps/TB14m1NKFXXXXXMaXXXXXXXXXXX-48-48.ico" type="image/x-icon">
+  #set($styleDomain = '//g.alicdn.com')
+  #if($webStyleTool.getStyleVersion('ctxIsPrePub','false') == 'true')
+    #set($styleDomain = "//g-assets.daily.taobao.net")
+  #end
+  
+  #set( $styleCSS = $styleDomain + "/dt/op-college/"+$webStyleTool.getStyleVersion('ctxCollegeVersion','1.0.0')+"/style.css")
+  #set( $vendorsJS = $styleDomain + "/dt/op-college/"+$webStyleTool.getStyleVersion('ctxCollegeVersion','1.0.0')+"/vendors.js")
+  #set( $appJS = $styleDomain + "/dt/op-college/"+$webStyleTool.getStyleVersion('ctxCollegeVersion','1.0.0')+"/app.js")
+
+  #if($!{useDebug}!='true')
+    <link rel="stylesheet" href=$styleCSS />
+  #end
+  <!--[if lte IE 9]>
+  <script>if (!/update\.htm/.test(location.href)) window.location = '//beta.sycm.taobao.com/update.htm'; </script>
+  <![endif]-->
+</head>
+<body>
+  <div id="app"></div>
+  #if($!{useDebug}!='true')
+    <script type="text/javascript" src=$vendorsJS ></script>
+    <script type="text/javascript" src=$appJS ></script>
+  #else
+    <script type="text/javascript" src="http://op-college.tbcdn.cn:6050/static/vendors.js" ></script>
+    <script type="text/javascript" src="http://op-college.tbcdn.cn:6050/static/app.js" ></script>
+  #end
+</body>
+</html>

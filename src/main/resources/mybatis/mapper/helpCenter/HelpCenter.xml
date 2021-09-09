@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+    <!DOCTYPE mapper   
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.alibaba.dt.op.college.dal.dao.helpCenter.impl.HelpCenterDaoImpl">
+	
+	<!-- 获取指标注释菜单关系 -->
+	<select id="indexNoteRelation" parameterType="String" resultType="com.alibaba.dt.op.college.biz.bo.courseCenter.MenuBO">
+		select 
+		menu_id as id,
+		parent_id as parentId,
+		name as name
+		from 
+		op_college_index_classify
+		where 
+		single_shop_flag = #{versionType}
+		and 
+		type='0'
+	</select>
+	
+	<!-- 获取指标注释菜单、指标关联关系 -->
+	<select id="menuIndexRelation" resultType="com.alibaba.dt.op.college.biz.bo.courseCenter.MenuBO">		
+		select 
+		menu_id as id,
+		parent_id as parentId,
+		name as name,
+		type as type
+		from 
+		op_college_index_classify
+	</select>
+	
+	<!-- 获取来源注释菜单、指标关联关系 -->
+	<select id="menuSourceRelation" resultType="com.alibaba.dt.op.college.biz.bo.helpCenter.SourceMenuBO">		
+		select 
+		menu_id as id,
+		parent_id as parentId,
+		name as name,
+		is_leaf as isLeaf
+		from 
+		op_college_index_source
+	</select>
+	
+	<!-- 获取指标注释所有菜单 -->
+	<select id="menuId" resultType="com.alibaba.dt.op.college.biz.bo.courseCenter.MenuBO">		
+		select 
+		menu_id as id,
+		parent_id as parentId,
+		name as name,
+		type as type
+		from 
+		op_college_index_classify
+		where
+		type = '0'
+	</select>
+	
+	<!-- 获取来源注释所有菜单 -->
+	<select id="menuSourceId" resultType="com.alibaba.dt.op.college.biz.bo.helpCenter.SourceMenuBO">		
+		select 
+		menu_id as id,
+		parent_id as parentId,
+		name as name,
+		is_leaf as isLeaf
+		from 
+		op_college_index_source
+		where
+		is_leaf = 'N'
+	</select>
+	
+	<!-- 获取指标注释列表 -->
+		<select id="getIndexNoteList" parameterType="map" resultType="com.alibaba.dt.op.college.biz.bo.helpCenter.IndexNoteListBO">
+		select 
+		menu_id as indexId,
+		parent_id as indexParentId,
+		name as name,
+		description as description
+		from 
+		op_college_index_classify
+		<where>
+			type = '1'
+			and
+			single_shop_flag=#{versionType}
+			<if test="keyword != null and keyword != ''">
+				and name like concat('%',#{keyword},'%')		
+			</if>
+		</where>
+	</select>
+	
+	<!-- 获取来源注释菜单关系 -->
+	<select id="sourceNoteRelation" parameterType="String" resultType="com.alibaba.dt.op.college.biz.bo.helpCenter.SourceMenuBO">
+		select 
+		menu_id as id,
+		parent_id as parentId,
+		name as name
+		from 
+		op_college_index_source
+		where
+		is_leaf = 'N'
+<!-- 		<if test="deviceType != null and deviceType != ''">
+ -->			and device_type = #{deviceType}
+<!-- 		</if>
+ -->	</select>
+	
+	<!-- 获取来源注释列表 -->
+	<select id="getSourceNoteList" parameterType="map" resultType="com.alibaba.dt.op.college.biz.bo.helpCenter.SourceNoteListBO">
+		select 
+		menu_id as sourceId,
+		name as name,
+		from_desc as description
+		from 
+		op_college_index_source
+		<where>
+			is_leaf = 'Y'
+			and
+			device_type = #{flowType}
+			<if test="keyword != null and keyword != ''">
+				and name like concat('%',#{keyword},'%')		
+			</if>
+		</where>
+	</select>
+	
+	<!-- 获取问题列表 -->
+	<select id="getFaqList" parameterType="map" resultType="com.alibaba.dt.op.college.biz.bo.helpCenter.FaqBO">
+		select 
+		ocf.question as question,
+		ocf.answer as answer,
+		ocfs.name as category
+		from 
+		op_college_faq ocf, op_college_faq_subject ocfs
+		<where>
+			ocf.single_shop_flag ='s'
+			and
+			ocf.subject_id = ocfs.id
+			<if test="keyword != null and keyword != ''">
+				and ocf.question like concat('%',#{keyword},'%')		
+			</if>
+			<if test="faqCategoryId != null and faqCategoryId != '' and faqCategoryId != 0">
+				and ocf.subject_id = #{faqCategoryId}		
+			</if>
+		</where>
+		order by priority
+	</select>
+	
+	
+	<!-- 获取主题类别列表 -->
+	<select id="getFaqCategory" parameterType="map" resultType="com.alibaba.dt.op.college.biz.bo.helpCenter.FaqBO">
+		select 
+		id as categoryId,
+		name as category,
+		single_shop_flag as singleShopFlag
+		from 
+		op_college_faq_subject
+	</select>
+</mapper>

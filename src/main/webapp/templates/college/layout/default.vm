@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="renderer" content="webkit">
+  <meta name="data-spm" content="a21ag"/>
+  <meta name="keywords" content="生意参谋, 淘宝生意参谋, 生意参谋淘宝版, 淘宝卖家经营分析, 淘宝店铺流量分析, 阿里巴巴生意参谋">
+  <meta name="description" content="阿里巴巴生意参谋淘宝版是淘宝卖家开店做生意和数据化经营的参谋平台，涵盖页面分析、宝贝温度计、无线专题分析等功能；精细化运营店铺，尽在淘宝版生意参谋！">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="microdata" content="viewMode=$!{viewMode};storeVersion=$!{storeVersion};isSudo=$!{isSudo};ctxEnv=$!{ctxEnv};bucUserId=$!{bucUserId};bucUserName=$!{bucUserName};loginUserId=$!{loginUserId};loginUserName=$!{loginUserName};mainUserId=$!{mainUserId};mainUserName=$!{mainUserName};runAsUserId=$!{runAsUserId};runAsUserName=$!{runAsUserName};runAsShopType=$!{runAsShopType};runAsShopTitle=$!{runAsShopTitle};runAsShopId=$!{runAsShopId};isSudo=$!{isSudo};legalityToken=$!{legalityToken};splitTag=splitTag;storeVersion=$!{storeVersion};isSudo=$!{isSudo};userId=$!{userId};cateId=$!{cateId};shopType=$!{shopType};token=$!{sycmToken};updateDay=$!{lastDay};">
+  <title>生意参谋</title>
+  #if($!{useDebug}=='true')
+    <link rel="stylesheet" href="http://op-core.tbcdn.cn/watch/core.css"/>
+  #else
+    <link rel="stylesheet" href="http://g.tbcdn.cn/dt/op-core/$!{opCoreVersion}/core.css"/>
+  #end
+  #showStylesheets()
+  <!--[if lt IE 8]>
+  <script>if (!/update\.htm/.test(location.href)) window.location = 'http://beta.sycm.taobao.com/update.htm'; </script>
+  <![endif]-->
+  <!--[if IE 8]>
+  #if($!{useDebug}=='true')
+    <script src="http://vendor.tbcdn.cn/watch/compat.js"></script>
+  #else
+    <script src="http://g.tbcdn.cn/dt/vendor/$!{vendorVersion}/compat.js"></script>
+  #end
+  <![endif]-->
+</head>
+<body #if($!page.bodyAttributes.get('spm'))data-spm="$!page.bodyAttributes.get('spm')"#end>
+  ##$control.setTemplate("header.vm")
+  <div class="container" id="container" data-domain='$!{domain}'>
+    <nav id="nav" data-menuid="$!menuId" data-menupath="$!menuPath"></nav>
+    <article class="main" id="main"
+      data-industry-infos='$!{industryInfos}'>
+      $screen_placeholder
+    </article>
+  </div>
+  ##$control.setTemplate("footer.vm")
+  #if($!{useDebug}=='true')
+    <script src="http://vendor.tbcdn.cn/watch/vendor.js"></script>
+    <script src="http://oneui.tbcdn.cn/watch/oneui.js"></script>
+    <script src="http://op-core.tbcdn.cn/watch/core.js"></script>
+  #else
+    <script src="http://g.tbcdn.cn/dt/??vendor/$!{vendorVersion}/vendor.js,oneui/$!{oneuiVersion}/oneui.js,op-core/$!{opCoreVersion}/core.js"></script>
+    <script src="http://g.tbcdn.cn/tb/tracker/1.0.16/index.js"></script>
+    <script>
+        window.JSTracker && JSTracker.config('sampling', 20);//设置抽样率1/200
+    </script>
+  #end
+  #showJavascripts()
+</body>
+</html>

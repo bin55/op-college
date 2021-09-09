@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+    <!DOCTYPE mapper   
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.alibaba.dt.op.college.dal.dao.collegeOverview.impl.CollegeOverviewDaoImpl">
+	<!-- 产品功能课程推荐 -->
+	<select id="productFeature" resultType="com.alibaba.dt.op.college.biz.bo.collegeOverview.RecommendCourseBO">
+		SELECT 
+		occr.course_id id,
+		occ.name title,
+		img_url imageUrl,
+		description detail	
+		FROM op_college_course_recommend occr, op_college_course occ
+		WHERE occr.block='产品功能' AND occr.course_id=occ.id
+		ORDER BY occr.gmt_modify DESC
+		limit 4
+	</select>
+	
+	<!-- 数据化运营课程推荐 -->
+	<select id="dataManagement" resultType="com.alibaba.dt.op.college.biz.bo.collegeOverview.RecommendCourseBO">
+		SELECT 
+		occr.course_id id,
+		occ.name title,
+		img_url imageUrl,
+		description detail	
+		FROM op_college_course_recommend occr, op_college_course occ
+		WHERE occr.block='数据化运营' AND occr.course_id=occ.id
+		ORDER BY occr.gmt_modify DESC
+		limit 4
+	</select>
+	
+	<!-- 新课速递课程推荐 -->
+	<select id="newCourseDelivery" resultType="com.alibaba.dt.op.college.biz.bo.collegeOverview.RecommendCourseBO">
+		SELECT 
+		id id,
+		name title,
+		img_url imageUrl,
+		description detail
+		FROM op_college_course
+		WHERE enabled_state!='0'
+		ORDER BY gmt_modify DESC
+		limit 4
+	</select>
+	
+	<!-- 成功案例课程推荐 -->
+	<select id="successCase" resultType="com.alibaba.dt.op.college.biz.bo.collegeOverview.RecommendCourseBO">
+		SELECT 
+		occr.course_id id,
+		occ.name title,
+		img_url imageUrl,
+		description detail	
+		FROM op_college_course_recommend occr, op_college_course occ
+		WHERE occr.block='成功案例' AND occr.course_id=occ.id
+		ORDER BY occr.gmt_modify DESC
+		limit 4
+	</select>
+	
+	<!-- 优秀讲师列表信息 -->
+	<select id="excellentTeacher" resultType="com.alibaba.dt.op.college.biz.bo.collegeOverview.PartnerBO">
+		SELECT 
+		name title,
+		img_url imageUrl,
+		description detail
+		FROM 
+		op_college_partner
+		WHERE type='0' AND enabled_state!='0'
+		ORDER BY priority DESC
+	</select>
+	
+	<!-- 合作机构列表信息 -->
+	<select id="partners" resultType="com.alibaba.dt.op.college.biz.bo.collegeOverview.PartnerBO">
+		SELECT 
+		name title,
+		img_url imageUrl,
+		description detail
+		FROM 
+		op_college_partner
+		WHERE type='1' AND enabled_state!='0'
+		ORDER BY priority DESC
+	</select>
+
+	<!-- 数据小贴士指标信息 -->	
+	<select id="dataTipsIndex" resultType="com.alibaba.dt.op.college.biz.bo.helpCenter.IndexNoteListBO">
+		SELECT
+		menu_id indexId,
+		name name,
+		description description
+		FROM 
+		op_college_index_classify
+		WHERE type='1' AND priority = 99
+		ORDER BY gmt_modify DESC
+		limit 1
+	</select>
+	
+	<!-- 数据小贴士来源信息 -->	
+	<select id="dataTipsSource" resultType="com.alibaba.dt.op.college.biz.bo.helpCenter.SourceNoteListBO">
+		SELECT
+		menu_id sourceId,
+		name name,
+		from_desc description
+		FROM 
+		op_college_index_source
+		WHERE is_leaf='Y' AND priority = 99
+		ORDER BY gmt_modify DESC
+		limit 1
+	</select>
+	
+	<!-- 数据小贴士常见问题 -->	
+	<select id="dataTipsFaq" resultType="com.alibaba.dt.op.college.biz.bo.helpCenter.FaqBO">
+		SELECT
+		ocf.id questionId,
+		ocf.question question,
+		ocf.answer answer,
+		ocfs.name category
+		FROM 
+		op_college_faq ocf,
+		op_college_faq_subject ocfs
+		WHERE ocf.priority = 99 AND ocf.subject_id=ocfs.id
+		ORDER BY ocf.gmt_modify DESC
+		limit 1
+	</select>
+	
+</mapper>

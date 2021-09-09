@@ -1,0 +1,8 @@
+env=${env}
+loggingLevel= ${loggingLevel}
+loggingRoot=${loggingRoot}
+work=${work}
+work.dir=${work_dir}
+auth.env=${auth_env}
+tddl.appName=${tddl_appName}
+

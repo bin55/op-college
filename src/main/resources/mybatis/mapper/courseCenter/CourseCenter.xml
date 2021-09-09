@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+    <!DOCTYPE mapper   
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.alibaba.dt.op.college.dal.dao.courseCenter.impl.CourseCenterDaoImpl">
+	<!-- 获取菜单信息 -->
+	<select id="getCategory" parameterType="map" resultType="com.alibaba.dt.op.college.biz.bo.courseCenter.MenuBO">
+		select 
+		menu_id   as id,
+		parent_id as parentId,
+		menu_name as name
+		from 
+		op_college_subject_relation
+	</select>
+	
+	<!-- 获取课程列表 -->
+	<select id="courseList" parameterType="map" resultType="com.alibaba.dt.op.college.biz.bo.courseCenter.CourseBO">
+		select 
+		occ.id   as id,
+		occ.name as title,
+		occsc.subject as subject,
+		occsc.category as category,
+		ocp.name as teacher,
+		occ.type as type,
+		occ.img_url as imageUrl,
+		occ.learn_times as participantCount,
+		occ.gmt_modify as gmtModify
+		from 
+		op_college_course occ, 
+		op_college_partner ocp,
+		op_college_course_subject_category occsc
+		<where>
+			occ.teacher=ocp.id 
+			and 
+			occ.id=occsc.course_id
+			and 
+			ocp.type='0' 
+			and 
+			occ.enabled_state!='0'
+			<if test="keyword != null and keyword != ''">
+				and (occ.name like concat('%',#{keyword},'%') or ocp.name like concat('%',#{keyword},'%'))
+			</if>
+			<if test="type != null and type != ''">
+				and occ.type = #{type}		
+			</if>
+			<if test="subject != null and subject != ''">
+				and occsc.subject = #{subject}		
+			</if>
+			<if test="category != null and category != ''">
+				and occsc.category = #{category}		
+			</if>
+		</where>
+		order by occ.gmt_modify desc
+	</select>
+	
+	<!-- 统计课程学习人数 -->
+	<update id="count">
+		update 
+		op_college_course
+		set
+		learn_times = learn_times + 1
+		where 
+		id=#{courseId}	
+	</update>
+	
+	<!-- 课程推荐 -->
+	<select id="courseRecommend" parameterType="map" resultType="com.alibaba.dt.op.college.biz.bo.collegeOverview.RecommendCourseBO">
+		select 
+		occ.id as id,
+		occ.name as title,
+		occ.description as detail,
+		occ.img_url as imageUrl
+		from 
+		op_college_course occ, 
+		op_college_course_recommend occr
+		where
+		occ.id=occr.course_id
+		and
+		occ.enabled_state!='0'
+		and
+		occr.block='课程中心推荐'
+		limit 4
+	</select>
+	
+	<!-- 用户对课程打分 -->
+	<insert id="insertGrade" parameterType="map" >
+		insert into 
+		op_college_user_course_score
+		(
+		user_id,
+		course_id,
+		score,
+		gmt_created,
+		gmt_modify	
+		)
+		values
+		(
+		#{userId},
+		#{courseId},
+		#{grade},
+		now(),
+		now()
+		)
+	</insert>
+	
+	<!-- 查看当前用户对课程是否已经评分 -->
+	<select id="getUserCourse" parameterType="map" resultType="int">
+		select 
+		count(*)
+		from 
+		op_college_user_course_score 
+		where
+		user_id =#{userId}		
+		and
+		course_id = #{courseId}
+	</select>
+	
+	<!-- 更新用户对课程的评分 -->
+	<update id="updateGrade" parameterType="map">
+		update 
+		op_college_user_course_score
+		set
+		score = #{grade},
+		gmt_modify = now()
+		where
+		user_id=#{userId}
+		and 
+		course_id=#{courseId}
+	</update>
+	
+	<!-- 获取课程详情 -->
+	<select id="getCourseDetail" parameterType="int" resultType="com.alibaba.dt.op.college.biz.bo.courseCenter.CourseDetailBO">
+		select 
+		occ.name as title,
+		ocp.name as teacher,
+		occ.type as type,
+		concat(occsc.subject,"-",occsc.category) as category,
+		occ.gmt_modify as gmtModify,
+		occ.learn_times as participantCount,
+		occ.description as description,
+		occ.link_url as linkUrl,
+		occ.text_content as textContent
+		from 
+		op_college_course occ,
+		op_college_partner ocp,
+		op_college_course_subject_category occsc
+		where
+		occ.id=#{course_id}
+		and
+		occ.id=occsc.course_id
+		and
+		occ.teacher=ocp.id
+		and
+		ocp.type='0'
+		and
+		occ.enabled_state!='0'
+		group by occ.id
+	</select>
+	
+	<!-- 获取一门课程的平均分 -->
+	<select id="getCourseAvgScore" parameterType="int" resultType="float">
+		select 
+		AVG(score) as grade
+		from
+		op_college_user_course_score
+		where course_id = #{course_id}
+		and
+		user_id is not null;
+	</select>
+	
+	<!-- 获取当前用户对课程打分 -->
+	<!-- <select id="getUserGrade" parameterType="Long" resultType="Float">
+		select 
+		score
+		from 
+		op_college_user_course_score 
+		where
+		id=(
+			select MAX(id) as id from op_college_user_course_score
+			where 
+			    id > 0
+				<if test="userId != null and userId != ''">
+					and user_id =#{userId}		
+				</if>
+			)
+		<if test="userId != null and userId != ''">
+			and user_id =#{userId}		
+		</if>
+	</select> -->
+	
+	<select id="getUserGrade" parameterType="map" resultType="int">
+		select 
+		score
+		from 
+		op_college_user_course_score 
+		where
+		user_id =#{userId}	
+		and 
+		course_id= #{courseId}	
+	</select>
+	
+	<!-- 获取当前课程的相关课程 -->
+	<select id="getRelevantCourse" parameterType="int" resultType="com.alibaba.dt.op.college.biz.bo.courseCenter.CourseBO">
+		select 
+		occ.id as id,
+		occ.name as title,
+		occ.type as type,
+		ocp.name as teacher,
+		occ.description as description,
+		occ.link_url as linkUrl,
+		occ.img_url as imageUrl,
+		occ.text_content as textContent
+		from 
+		op_college_course occ, 
+		op_college_partner ocp
+		where 
+		occ.enabled_state!='0'
+		and
+		occ.teacher=ocp.id
+		and
+		occ.id in(
+			select course_id
+			from 
+			op_college_course_subject_category
+			where 
+			subject in(
+				select subject 
+				from op_college_course_subject_category
+				where course_id = #{courseId}
+			)
+		)
+		limit 5
+	</select>
+	
+</mapper>
